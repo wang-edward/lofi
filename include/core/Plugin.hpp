@@ -1,4 +1,5 @@
 #pragma once
+
 #include "al/graphics/al_Graphics.hpp"
 #include "al/io/al_AudioIO.hpp"
 #include "al/io/al_Window.hpp"
