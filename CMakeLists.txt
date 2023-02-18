@@ -1,9 +1,9 @@
 cmake_minimum_required(VERSION 3.0)
 
-project(allotester)
+project(lofi)
 
 # name of application. replace 'app' with desired app name
-set(APP_NAME app)
+set(APP_NAME lofi)
 
 # path to main source file
 add_executable(${APP_NAME} src/main.cpp)
