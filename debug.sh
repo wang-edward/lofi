@@ -18,5 +18,5 @@
 
 result=$?
 if [ ${result} == 0 ]; then
-  gdb -ex run ./bin/appd
+  gdb -ex run ./bin/lofid
 fi
