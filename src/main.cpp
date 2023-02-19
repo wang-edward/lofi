@@ -1,4 +1,5 @@
 #include <cstdio>  // for printing to stdout
+#include <iostream>
 
 #include "Gamma/Analysis.h"
 #include "Gamma/Effects.h"
@@ -16,12 +17,16 @@
 #include "al/graphics/al_Font.hpp"
 
 #include "plugins/Keyboard.hpp"
-
+#include "ui/Slider.hpp"
 
 class MyApp : public al::App {
  public:
  
-   lofi::Keyboard bro;
+  lofi::Keyboard bro;
+  lofi::Slider man{{0,0}, {0.5,1}, {1, 0, 0}};
+
+
+  al::Mesh bab;
 
   void onCreate() override {
     navControl().active(false);  // Disable navigation via keyboard, since we
@@ -37,10 +42,15 @@ class MyApp : public al::App {
   // The audio callback function. Called when audio hardware requires data
   void onSound(al::AudioIOData& io) override {
     bro.onProcess(io);
-
   }
 
   // The graphics callback function.
+  void onDraw(al::Graphics& g) override{
+    g.camera(al::Viewpoint::UNIT_ORTHO_INCLUSIVE);
+    g.meshColor();
+    g.clear();
+    man.onProcess(g);
+  }
 
   // Whenever a key is pressed, this function is called
   bool onKeyDown(al::Keyboard const& k) override {
