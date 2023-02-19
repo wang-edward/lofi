@@ -17,16 +17,20 @@
 #include "al/graphics/al_Font.hpp"
 
 #include "plugins/Keyboard.hpp"
+#include "serial/Serial.hpp"
 #include "ui/Slider.hpp"
 
 class MyApp : public al::App {
  public:
  
-  lofi::Keyboard bro;
+  enum CURRENT_PLUGIN {SAMPLER, SYNTH};
+  lofi::Keyboard mKeyboard;
   lofi::Slider man{{0,0}, {0.5,1}, {1, 0, 0}};
-
+  // lofi::Serial mSerial;
+  lofi::CompositeData mData;
 
   al::Mesh bab;
+  CURRENT_PLUGIN mCurrentPlugin = SYNTH;
 
   void onCreate() override {
     navControl().active(false);  // Disable navigation via keyboard, since we
@@ -41,7 +45,12 @@ class MyApp : public al::App {
 
   // The audio callback function. Called when audio hardware requires data
   void onSound(al::AudioIOData& io) override {
-    bro.onProcess(io);
+    mKeyboard.onProcess(io);
+  }
+
+  void onAnimate(double dt) override {
+    lofi::CompositeData temp = {1, 0,0,1,1,1};
+    mKeyboard.updateParameters(temp);
   }
 
   // The graphics callback function.
@@ -50,18 +59,23 @@ class MyApp : public al::App {
     g.meshColor();
     g.clear();
     man.onProcess(g);
-    man.setPercentage(0.2);
   }
 
   // Whenever a key is pressed, this function is called
   bool onKeyDown(al::Keyboard const& k) override {
-    bro.onTriggerOn(k);
+    mKeyboard.onTriggerOn(k);
     return true;
   }
 
   // Whenever a key is released this function is called
   bool onKeyUp(al::Keyboard const& k) override {
-    bro.onTriggerOff(k);
+    switch(mCurrentPlugin) {
+      case SYNTH:
+        mKeyboard.onTriggerOff(k);
+      case SAMPLER:
+        int x;
+
+    }
     return true;
   }
   
