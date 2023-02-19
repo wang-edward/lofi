@@ -37,7 +37,7 @@ public:
   void setPercentage(float newPercentage) {
     mPercentage = newPercentage;
     std::cout<<mInner.vertices().size()<<std::endl;
-    al::Vec2f total = {dimensions.x, dimensions.y * mPercentage};
+    // al::Vec2f total = {dimensions.x, dimensions.y * mPercentage};
     
     // do (mOuter * 0.9) * 
     
