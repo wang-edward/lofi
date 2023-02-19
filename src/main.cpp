@@ -15,9 +15,14 @@
 #include "al/graphics/al_Shapes.hpp"
 #include "al/graphics/al_Font.hpp"
 
+#include "plugins/Keyboard.hpp"
+
+
 class MyApp : public al::App {
  public:
-  
+ 
+   lofi::Keyboard bro;
+
   void onCreate() override {
     navControl().active(false);  // Disable navigation via keyboard, since we
                                  // will be using keyboard for note triggering
@@ -31,17 +36,21 @@ class MyApp : public al::App {
 
   // The audio callback function. Called when audio hardware requires data
   void onSound(al::AudioIOData& io) override {
+    bro.onProcess(io);
+
   }
 
   // The graphics callback function.
 
   // Whenever a key is pressed, this function is called
   bool onKeyDown(al::Keyboard const& k) override {
+    bro.onTriggerOn(k);
     return true;
   }
 
   // Whenever a key is released this function is called
   bool onKeyUp(al::Keyboard const& k) override {
+    bro.onTriggerOff(k);
     return true;
   }
   
@@ -66,3 +75,4 @@ int main() {
   app.start();
   return 0;
 }
+

@@ -1,3 +1,4 @@
+#pragma once
 // The helper function used to visualize which keys pressed or released on a virtual piano.
 int asciiToKeyLabelIndex(int asciiKey) {
   switch (asciiKey) {
