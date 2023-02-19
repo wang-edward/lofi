@@ -10,6 +10,8 @@ add_executable(${APP_NAME}
   src/main.cpp 
   src/plugins/Keyboard.cpp
   src/plugins/SineEnv.cpp
+  src/serial/serial_devices.cpp
+  src/serial/serial_port.cpp
 )
 
 # add allolib as a subdirectory to the project
