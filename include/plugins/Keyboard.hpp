@@ -6,6 +6,7 @@
 #include "al/scene/al_PolySynth.hpp"
 #include "al/app/al_App.hpp"
 
+#include "serial/CompositeData.hpp"
 // #include "utils/Utils.h"
 
 namespace lofi {
@@ -19,9 +20,12 @@ public:
   void onProcess(al::Graphics& g);
   void onTriggerOn(const al::Keyboard &k);
   void onTriggerOff(const al::Keyboard &k);
+  void updateParameters(CompositeData& c);
+  void updateFilterFreq(float v);
 
 private:
   al::PolySynth mSynth;
+  float mFilterFreq = 200;
 };
 
 } // namespace lofi

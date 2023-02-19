@@ -3,13 +3,18 @@
 namespace lofi {
 
 Keyboard:: Keyboard() {
+  mSynth.allocatePolyphony<SineEnv>(16);
+}
 
+void Keyboard:: updateParameters(const CompositeData& c) {
+  mFilterFreq = c.pos0 * 10000; // max freq
 }
 
 void Keyboard:: onProcess(al::AudioIOData &io) {
   mSynth.render(io);
 }
 void Keyboard:: onProcess(al::Graphics& g) {
+  mSynth.render(g);
     // mSineEnv.onProcess(g);
 }
 void Keyboard:: onTriggerOn(const al::Keyboard &k) {
@@ -19,6 +24,7 @@ void Keyboard:: onTriggerOn(const al::Keyboard &k) {
     SineEnv* voice = mSynth.getVoice<SineEnv>();
     std::cout<<frequency<<std::endl;
     voice->freq(frequency); 
+    voice->updateFilter(mFilterFreq);
     mSynth.triggerOn(voice, 0, midiNote);
   }
 }

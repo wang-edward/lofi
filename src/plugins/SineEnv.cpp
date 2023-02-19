@@ -4,6 +4,7 @@ SineEnv:: SineEnv() {
   mAmpEnv.curve(0);
   mAmpEnv.sustainPoint(2);
   addSphere(mMesh, 0.25, 30, 30);
+  mBq.type(gam::LOW_PASS);
 }
 
 SineEnv& SineEnv:: freq(float v) {
@@ -11,9 +12,14 @@ SineEnv& SineEnv:: freq(float v) {
   return *this;
 }
 
+void SineEnv:: updateFilter(float v) {
+    mBq.freq(v);
+}
+
 void SineEnv:: onProcess(al::AudioIOData& io) {
   while (io()) {
     float s = mOsc() * mAmpEnv() * mAmp;
+    s = mBq(s);
     io.out(0) += s;
     io.out(1) += s;
   }

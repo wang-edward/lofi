@@ -20,6 +20,7 @@ class SineEnv : public al::SynthVoice {
   SineEnv();
 
   SineEnv& freq(float v);
+  void updateFilter(float v);
 
   void onProcess(al::AudioIOData& io) override;
 
@@ -30,10 +31,14 @@ class SineEnv : public al::SynthVoice {
   void onTriggerOff() override;
 
  protected:
+  enum WAVEFORM {SINE, SQUARE, SAW};
   float mAmp{0.2f};
   float mDur{1.5f};
-  gam::Sine<> mOsc;
+  gam::Square<> mOsc;
+  gam::Square<> mOscSquare;
+  gam::Saw<> mOscSaw;
   gam::Env<3> mAmpEnv{0.f, 0.2f, 1.f, 1.0f, 1.f, 0.5f, 0.f};
+  gam::Biquad<> mBq;
   al::Mesh mMesh;
 
 };
