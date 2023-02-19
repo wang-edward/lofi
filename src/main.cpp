@@ -50,6 +50,7 @@ class MyApp : public al::App {
     g.meshColor();
     g.clear();
     man.onProcess(g);
+    man.setPercentage(0.2);
   }
 
   // Whenever a key is pressed, this function is called
