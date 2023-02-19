@@ -6,7 +6,11 @@ project(test)
 set(APP_NAME lofi)
 
 # path to main source file
-add_executable(${APP_NAME} src/main.cpp)
+add_executable(${APP_NAME} 
+  src/main.cpp 
+  src/plugins/Keyboard.cpp
+  src/plugins/SineEnv.cpp
+)
 
 # add allolib as a subdirectory to the project
 add_subdirectory(allolib)
