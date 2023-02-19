@@ -1,0 +1,66 @@
+#include <cstdio>  // for printing to stdout
+
+#include "Gamma/Analysis.h"
+#include "Gamma/Effects.h"
+#include "Gamma/Envelope.h"
+#include "Gamma/Oscillator.h"
+
+#include "al/app/al_App.hpp"
+#include "al/graphics/al_Shapes.hpp"
+#include "al/scene/al_PolySynth.hpp"
+#include "al/scene/al_SynthSequencer.hpp"
+#include "al/ui/al_ControlGUI.hpp"
+#include "al/ui/al_Parameter.hpp"
+
+#include "al/graphics/al_Shapes.hpp"
+#include "al/graphics/al_Font.hpp"
+#include <cmath>
+#include <numeric>
+
+
+//default params for vocoder
+
+class vocoder {
+	public:
+		const int nrChannels = 10; // # of split channels 
+		const int minFreq - 70; //lowest channel freq (Hz)
+		const int maxFreq = 10000; //highest channel freq (Hz)
+		const int q = 3; //Q of bandpass filters
+		const float envelopeSmoothing = 0.02 //attack/release time of envelope follower
+		/**
+		 * filter for channel k, 0 <= k < nrChannels
+		 * - settings {nrChannels, q} : settings object for the filter
+		 * - k integer : channel number
+		 * Returns a low-pass filter for k = 0, high-pass filter for k = nrChannels-1 and band-pass filter for 0 < k < nrChannels-1
+		 * The cutoff / center frequencies fc(k) are exponentially spaced.
+		 **/
+		gam::Sine<> mOsc;
+
+		void channelFilter (const settings, int k, mOsc x)
+		{		
+			Biquad<> bq;		// Biquad filter
+			LFO<> mod;			// Modulator on cutoff frequency
+			bq.res()
+			const baseFreq = Math.pow(maxFreq / minFreq, 1 / nrChannels - 1);
+			const baseChannel = Math.log(minFreq) / Math.log(baseFreq);
+			const fc = Math.pow(baseFreq, baseChannel + k);
+			bq.freq(fc);
+			if (k == 0) {
+				bq.type(LOW_PASS);
+				float s = bq(x());
+			}
+			else if (k == nrChannels - 1) {
+				bq.type(HIGH_PASS);
+				float s = bq(x());
+			}
+			else {
+				bq.type(BAND_PASS);
+				float s = bq(x());
+			}	
+		}	
+
+		
+
+
+};
+
