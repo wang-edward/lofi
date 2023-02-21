@@ -1,4 +1,5 @@
 #include "plugins/Keyboard.hpp"
+#include <iostream>
 
 namespace lofi {
 
@@ -7,11 +8,25 @@ Keyboard:: Keyboard() {
 }
 
 void Keyboard:: updateParameters(const CompositeData& c) {
-  mFilterFreq = c.pos0 * 10000; // max freq
+  std::cout<<c.pos2<<std::endl;
+  mFilterFreq = c.pos2 * 15000; // max freq
+  mVolume = c.pos1;
+  float curr = c.pos1;
+  if(curr <= 0.33) {
+    mGlobalWaveform = WAVEFORM::SINE;
+  } else if (curr <= 0.66) {
+    mGlobalWaveform = WAVEFORM::SQUARE;
+  } else {
+    mGlobalWaveform = WAVEFORM::SAW;
+  }
 }
 
 void Keyboard:: onProcess(al::AudioIOData &io) {
   mSynth.render(io);
+  while (io()) {
+    io.out(0) *= mVolume; 
+    io.out(1) *= mVolume; 
+  }
 }
 void Keyboard:: onProcess(al::Graphics& g) {
   mSynth.render(g);
@@ -25,6 +40,7 @@ void Keyboard:: onTriggerOn(const al::Keyboard &k) {
     std::cout<<frequency<<std::endl;
     voice->freq(frequency); 
     voice->updateFilter(mFilterFreq);
+    voice->mCurrentWaveform = mGlobalWaveform; 
     mSynth.triggerOn(voice, 0, midiNote);
   }
 }

@@ -38,30 +38,46 @@ public:
   }
 
   bool read(CompositeData& c) {
-		std::string read_str;
-    int rr = 0;
-    rr = mSerial.sreadline(read_str);
+    std::string out_str = "!";
+    int nout = mSerial.swrite(out_str);
 
-    if(rr <= 0) {
+    if (nout != out_str.size()) {
+      std::cout<<"BADREAD"<<std::endl;
       return false;
-    } else {
-      std::vector<float> buf;
-      std::stringstream ss(read_str);
-      float temp;
-      while (ss >> temp) {
-        buf.push_back(temp);
-      }
-      if (buf.size() == 6) {
-        std::cout<<"goodiz"<<std::endl;
-        // c.pos0 = buf[0];
-        // c.pos1 = buf[1];
-        // c.pos2 = buf[2];
-        // c.button0 = buf[3];
-        // c.button1 = buf[4];
-        // c.button2 = buf[5];
-      }
-      return true;
     }
+
+
+    for (int i=0;i<2;i++) {
+      
+      std::string read_str;
+      int rr = 0;
+      rr = mSerial.sreadline(read_str);
+      std::cout<<read_str<<std::endl;
+      
+      if(rr <= 0) {
+        std::cout<<"BAD READ return"<<std::endl;
+        return false;
+      } else {
+        std::vector<float> buf;
+        std::stringstream ss(read_str);
+        float temp;
+        while (ss >> temp) {
+          buf.push_back(temp);
+        }
+        if (buf.size() == 6) {
+          c.pos0 = buf[0];
+          c.pos1 = buf[1];
+          c.pos2 = buf[2];
+          c.button0 = buf[3];
+          c.button1 = buf[4];
+          c.button2 = buf[5];
+        } else {
+          std::cout<<"BAD READ"<<std::endl;
+        }
+        return true;
+      }
+    }
+		
   } 
   
 

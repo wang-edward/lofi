@@ -20,12 +20,14 @@ public:
   void onProcess(al::Graphics& g);
   void onTriggerOn(const al::Keyboard &k);
   void onTriggerOff(const al::Keyboard &k);
-  void updateParameters(CompositeData& c);
+  void updateParameters(const CompositeData& c);
   void updateFilterFreq(float v);
 
 private:
   al::PolySynth mSynth;
   float mFilterFreq = 200;
+ WAVEFORM mGlobalWaveform = WAVEFORM::SQUARE;
+ float mVolume = 0.5;
 };
 
 } // namespace lofi

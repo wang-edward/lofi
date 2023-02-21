@@ -1,14 +1,19 @@
 #include "plugins/SineEnv.hpp"
 
+namespace lofi {
+
 SineEnv:: SineEnv() {
   mAmpEnv.curve(0);
   mAmpEnv.sustainPoint(2);
   addSphere(mMesh, 0.25, 30, 30);
   mBq.type(gam::LOW_PASS);
+  mBq.res(1);
 }
 
 SineEnv& SineEnv:: freq(float v) {
   mOsc.freq(v);
+  mOscSquare.freq(v);
+  mOscSaw.freq(v);
   return *this;
 }
 
@@ -18,7 +23,16 @@ void SineEnv:: updateFilter(float v) {
 
 void SineEnv:: onProcess(al::AudioIOData& io) {
   while (io()) {
-    float s = mOsc() * mAmpEnv() * mAmp;
+    float osc = 0; 
+    if (mCurrentWaveform == WAVEFORM::SINE) {
+        osc = mOsc();
+    } else if (mCurrentWaveform == WAVEFORM::SQUARE) {
+        osc = mOscSquare(); 
+    } else if (mCurrentWaveform == WAVEFORM::SAW) {
+        osc = mOscSaw();
+    }
+    
+    float s = osc * mAmpEnv() * mAmp;
     s = mBq(s);
     io.out(0) += s;
     io.out(1) += s;
@@ -46,3 +60,5 @@ void SineEnv:: onTriggerOn() {
 void SineEnv:: onTriggerOff() { 
   mAmpEnv.release(); 
 }
+
+} // namespace lofi
